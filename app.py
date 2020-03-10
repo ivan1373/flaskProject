@@ -26,10 +26,10 @@ class ItemsModel(db.Model):
 @app.route('/items', methods=['GET'])
 def get_items():
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', type=int)
+    per_page = request.args.get('per_page', 10, type=int)
     #items = ItemsModel.query.paginate(
        # page, 3, False)
-    items = ItemsModel.query.paginate(page, per_page).items
+    items = ItemsModel.query.order_by(ItemsModel.id).paginate(page, per_page).items
     results = [
         {
             "id": item.id,
