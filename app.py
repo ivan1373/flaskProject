@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:123456@localhost:5432/flask_items"
@@ -24,14 +25,18 @@ class ItemsModel(db.Model):
 
 @app.route('/items', methods=['GET'])
 def get_items():
-    items = ItemsModel.query.all()
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', type=int)
+    #items = ItemsModel.query.paginate(
+       # page, 3, False)
+    items = ItemsModel.query.paginate(page, per_page).items
     results = [
         {
             "id": item.id,
             "name": item.name
         } for item in items]
 
-    return {"items": results, "message": "Item je uspješno dohvaćen"}
+    return {"items": results, "message": "Itemi su uspješno dohvaćeni"}
 
 
 @app.route('/items', methods=['POST'])
@@ -60,3 +65,6 @@ def delete_item(id):
     db.session.delete(item)
     db.session.commit()
     return {"message": "Item je uspješno izbrisan"}
+
+
+cors = CORS(app)
