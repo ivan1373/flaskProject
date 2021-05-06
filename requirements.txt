@@ -4,7 +4,7 @@ click==7.1.1
 cryptography==2.1.4
 enum34==1.1.6
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-SQLAlchemy==2.4.1
 gyp==0.1
 idna==2.6
